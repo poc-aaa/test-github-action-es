@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Verify Elasticsearch connection
         env:
-          ELASTIC_SEARCH_URL: http://localhost:9200
+          ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
         run: |
           echo $ELASTIC_SEARCH_URL
           curl -fsSL "$ELASTIC_SEARCH_URL/_cat/health?h=status"
