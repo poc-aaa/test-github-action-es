@@ -1,0 +1,22 @@
+name: Test ES
+on: [push]
+
+jobs:
+  test-job:
+    name: CI
+    runs-on: ubuntu-latest
+
+    services:
+      elasticsearch:
+        image: elasticsearch:8.13.0
+        ports:
+          - 9200/tcp
+        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+
+    steps:
+      - name: Verify Elasticsearch connection
+        env:
+          ELASTIC_SEARCH_URL: http://localhost:9200
+        run: |
+          echo $ELASTIC_SEARCH_URL
+          curl -fsSL "$ELASTIC_SEARCH_URL/_cat/health?h=status"
